@@ -2825,7 +2825,12 @@
 
             try {
                 // Construct the prompt with system instruction, family data, and conversation history
-                const systemInstruction = `现在时间是:${currentDateTimeInChinese}. 你是一个家族谱系专家，你的任务是根据提供的家族信息，回答用户关于家族成员的提问。请只回答基于你所提供的信息，不要编造。如果信息不在你提供的内容中，请说明你无法找到相关信息。请以简洁、直接的中文回答。`;
+                const systemInstruction = `现在时间是:${currentDateTimeInChinese}. 你是一个家族谱系专家，你的任务是根据提供的家族信息，回答用户关于家族成员的提问。\
+                请只回答基于你所提供的信息，不要编造。\
+                如果信息不在你提供的内容中，请说明你无法找到相关信息。请以简洁、直接的中文回答。\
+                然后以适当语气或者给予一定的评论,\
+                比如查到某人是个大学学习,要适当赞扬几句有才聪明爱学习之类的话语,\
+                又或者对于活得久的你就说他养生有方得了个长寿,早早就过世的就给予一定的惋惜,并提醒大家要注意身体健康,等等之类的评论.`;
                 
                 // For the first message, include the system instruction and family data.
                 // For subsequent messages, the chatHistory already contains this context.
