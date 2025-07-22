@@ -53,6 +53,34 @@
             background-color: #FFB400;
             border: 4px solid #f8f9fa;
         }
+        .chat-message {
+            margin-bottom: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            word-wrap: break-word; /* Ensure long words break */
+        }
+        .chat-message.user {
+            background-color: #e0f2fe; /* Light blue for user */
+            align-self: flex-end;
+            text-align: right;
+            margin-left: auto;
+        }
+        .chat-message.ai {
+            background-color: #f0f4f8; /* Light gray for AI */
+            align-self: flex-start;
+            text-align: left;
+            margin-right: auto;
+        }
+        .chat-history-display {
+            height: 300px; /* Fixed height for chat history */
+            overflow-y: auto; /* Enable scrolling */
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body class="text-[#242325]">
@@ -60,12 +88,12 @@
     <!-- 
     Infographic Narrative Plan:
     1.  Introduction: Hook with the title and the grand scope of the genealogy.
-    2.  The Progenitor's Journey: Detail the historical migration of Jingbo Zu due to the Yang Yinglong Incident using a timeline.
-    3.  Family Structure: Visualize the main four branches of the family using an HTML/CSS flowchart.
-    4.  Generational Legacy: Display the unique 17-character generation naming system.
-    5.  Clan Demographics: Use charts to show population by generation, geographical distribution, and the prevalence of the name "Qiang".
-    6.  Modern Heritage: Highlight the 2012 recompilation effort and the role of key members like Yang Qiang.
-    7.  New Feature: Family Character Insight (LLM-powered).
+    2.  New Feature: Family Genealogy Chatbot (LLM-powered conversational search) - MOVED TO FRONT.
+    3.  The Progenitor's Journey: Detail the historical migration of Jingbo Zu due to the Yang Yinglong Incident using a timeline.
+    4.  Family Structure: Visualize the main four branches of the family using an HTML/CSS flowchart.
+    5.  Generational Legacy: Display the unique 17-character generation naming system.
+    6.  Clan Demographics: Use charts to show population by generation, geographical distribution, and the prevalence of the name "Qiang".
+    7.  Modern Heritage: Highlight the 2012 recompilation effort and the role of key members like Yang Qiang.
     8.  Conclusion: Summarize the clan's resilience and enduring legacy.
     
     Color Palette Selection: "Energetic & Playful" (#00A6ED, #7FB800, #FFB400, #F6511D, #242325). Chosen for its vibrant, high-contrast nature to make historical data engaging and modern.
@@ -77,7 +105,7 @@
     -   Geographic Distribution: Chart.js Donut Chart. Goal: Compare (Composition). Justification: Excellent for showing parts of a whole for a few key locations.
     -   "Qiang" Name Analysis: Chart.js Bar Chart. Goal: Compare. Justification: Best for comparing the frequency of a name across different generation categories.
     -   Key Stats (e.g., compilation year): Large Text/Number. Goal: Inform. Justification: High impact for a single, important data point.
-    -   Family Character Insight (LLM): Text output from Gemini API. Goal: Inform/Engage. Justification: Provides personalized, context-aware insights.
+    -   Family Genealogy Chatbot (LLM): Text output from Gemini API. Goal: Inform/Engage. Justification: Provides personalized, context-aware answers to specific queries.
     
     Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in this output. All diagrams are built with HTML/CSS and all charts are rendered on Canvas by Chart.js.
     -->
@@ -90,6 +118,20 @@
         </header>
 
         <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <section class="lg:col-span-3 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-[#FFB400] mb-4">家族谱系问答 ✨</h2>
+                <p class="text-gray-700 mb-4">您可以提问关于家族成员的信息，例如：“请告诉我杨强是哪一年出生的？”或“杨强的家庭成员有哪些？”</p>
+                <div id="chatHistoryDisplay" class="chat-history-display mb-4">
+                    <div class="chat-message ai">你好！我是您的家族谱系助手。请问您有什么关于桐梓杨氏景伯祖世系的问题吗？</div>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <input type="text" id="chatInput" placeholder="输入您的问题..." class="flex-grow p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB400]">
+                    <button id="sendChatBtn" class="bg-[#FFB400] text-white font-bold py-3 px-6 rounded-md shadow-md hover:bg-orange-500 transition duration-300 ease-in-out">
+                        发送
+                    </button>
+                </div>
+            </section>
 
             <section class="lg:col-span-3 bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-2xl font-bold text-[#F6511D] mb-4">始祖的足迹：景伯祖的迁徙史</h2>
@@ -106,7 +148,6 @@
                     <div class="timeline-item">
                         <h3 class="font-semibold text-lg">最终定居</h3>
                         <p class="text-gray-600">景伯祖再次迁徙，最终定居于桐梓农会场，开枝散叶，子孙繁衍至今。</p>
-                        <p class="text-2xl font-bold text-[#F6511D] mb-4">点击访问2012年由杨朝贵主编, 杨朝纯,杨世模等协作编写的<a style="color:blue;" href="桐梓杨氏景伯祖世系家谱.pdf"><u>《桐梓杨氏景伯祖世系家谱》</u></a>一书</p>
                     </div>
                 </div>
             </section>
@@ -199,21 +240,6 @@
                 <div class="flex-shrink-0 text-center bg-blue-50 p-8 rounded-lg">
                     <div class="text-7xl font-bold text-[#00A6ED]">2012</div>
                     <div class="text-xl font-semibold text-gray-700 mt-2">新版家谱完成年份</div>
-                </div>
-            </section>
-
-            <section class="lg:col-span-3 bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-bold text-[#FFB400] mb-4">家族人物洞察 ✨</h2>
-                <p class="text-gray-700 mb-4">输入家族成员的名字，让AI为您生成一段富有启发性的家族洞察或祝福语。</p>
-                <div class="flex flex-col md:flex-row gap-4 mb-4">
-                    <input type="text" id="familyNameInput" placeholder="输入家族成员名字，如：杨强" class="flex-grow p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFB400]">
-                    <button id="generateInsightBtn" class="bg-[#FFB400] text-white font-bold py-3 px-6 rounded-md shadow-md hover:bg-orange-500 transition duration-300 ease-in-out">
-                        生成洞察 ✨
-                    </button>
-                </div>
-                <div id="insightOutput" class="bg-gray-50 p-4 rounded-md border border-gray-200 min-h-[80px] flex items-center justify-center text-gray-700 italic">
-                    <span id="insightPlaceholder">洞察结果将显示在这里...</span>
-                    <div id="insightLoading" class="hidden animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                 </div>
             </section>
 
@@ -350,44 +376,96 @@
             options: { ...defaultChartOptions }
         });
 
-        // Gemini API Integration
-        document.getElementById('generateInsightBtn').addEventListener('click', async () => {
-            const name = document.getElementById('familyNameInput').value.trim();
-            const insightOutput = document.getElementById('insightOutput');
-            const insightPlaceholder = document.getElementById('insightPlaceholder');
-            const insightLoading = document.getElementById('insightLoading');
-            const generateInsightBtn = document.getElementById('generateInsightBtn');
+        // Gemini API Integration for Chatbot
+        const chatHistoryDisplay = document.getElementById('chatHistoryDisplay');
+        const chatInput = document.getElementById('chatInput');
+        const sendChatBtn = document.getElementById('sendChatBtn');
 
-            console.log('Button clicked. Name:', name);
+        let chatHistory = []; // Stores conversation history for LLM context
 
-            if (!name) {
-                insightOutput.innerHTML = '<span class="text-red-500">请输入一个名字。</span>';
-                insightPlaceholder.classList.add('hidden');
-                insightOutput.classList.remove('justify-center');
-                return;
-            }
+        const familyData = `
+            以下是桐梓杨氏景伯祖世系家谱中关于家族成员的详细信息：
 
-            // 禁用按钮并显示加载/等待信息
-            generateInsightBtn.disabled = true;
-            const originalButtonText = generateInsightBtn.textContent;
-            generateInsightBtn.textContent = '正在生成洞察...';
+            **杨强 (忠字辈，家谱排版编辑)**:
+            - 出生日期: 农历1977年9月3日
+            - 婚姻状况: 未婚
+            - 教育背景: 原贵州工学院毕业
+            - 居住地: 深圳
+            - 父亲: 杨朝棣 (杨代金次子, 1942年4月10日生, 居底水坝)
+            - 母亲: 苏慎芬 (1943年9月3日生, 原籍茅石乡茅坪)
+            - 兄弟姐妹:
+                - 长兄: 杨忠健 (1974年1月2日生, 居桐梓城区, 配偶胡定美(1978年7月8日生), 育两子钧昊和家诚)
+                - 姐姐: 忠敏 (1970年出生, 配偶胡玉国, 居遵义市区)
+                - 姐姐: 忠莉 (1972年出生, 配偶张宗志, 居桐梓651厂旁)
+                - 妹妹: 小红 (1981年7月13日生, 配偶赵小川(重庆江津人), 居遵义市区)
+            - 家谱角色: 排版编辑，电子邮箱yqse@163.com
 
-            insightPlaceholder.classList.add('hidden');
-            insightLoading.classList.remove('hidden');
-            insightOutput.classList.remove('justify-center');
-            insightOutput.innerHTML = '<span class="text-gray-500">正在生成洞察...</span>';
-            console.log('Output area cleared and loading message set.');
+            **其他名字中含“强”字的家族成员**:
+            - **杨家强 (杨强娃)**: 辈分“家”, 父亲杨忠友, 1982年11月7日生, 居桐梓城区, 配偶李梅, 女慕燃(2012年3月30日生)。
+            - **杨忠强 (杨朝烈之子)**: 辈分“忠”, 父亲杨朝烈, 1931年出生, 居田沟, 配偶周国梅, 子家鑫, 女家容、家敏。
+            - **杨家强 (杨忠元之子)**: 辈分“家”, 父亲杨忠元, 1966年出生, 居田沟。
+            - **杨忠强 (杨朝俊之子)**: 辈分“忠”, 父亲杨朝俊, 1941年出生, 居田沟, 配偶周大英, 子家权, 女家群。
+            - **杨忠强 (杨朝学之子)**: 辈分“忠”, 父亲杨朝学, 1954年10月4日生, 居板桥中寺谭家塆, 配偶黄氏, 子家奥, 女家利。
+            - **杨朝强 (杨代友之子)**: 辈分“朝”, 父亲杨代友, 1958年2月生, 居水井窝, 配偶令狐绍英, 女忠怡。
+            - **杨忠强 (杨朝佑之子)**: 辈分“忠”, 父亲杨朝佑, 1955年出生, 居杨家沟, 配偶吴远平, 女家倩、博雯。
+            - **杨代强 (杨世贵之子)**: 辈分“代”, 父亲杨世贵, 1932年出生, 居杨家沟, 配偶李应秋, 子朝鑫。
+            - **杨代强 (杨世义之子)**: 辈分“代”, 父亲杨世义, 1979年3月20日生, 居桐梓鱼溪沟。
+            - **杨永启 (朝字辈)**: 父亲杨代芳, 1974年3月14日生, 配偶贺萍, 三子杨林、杨钦、杨鑫, 两女杨丹、杨焰。
+            - **杨鑫 (忠字辈)**: 父亲杨永启, 2008年12月19日生。
+            - **杨永财 (朝字辈)**: 父亲杨代芳, 1984年5月29日生, 配偶伍玲玲, 两女杨婷婷、杨微微。
+
+            辈分排行: 景、在、惟、茂、学、(单名)、文、正、大、光、明、世、代、朝、忠、家、国。
+            请注意，家谱中可能存在同名情况，请根据辈分、父母等信息进行区分。
+        `;
+
+        function addMessageToChat(message, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.textContent = message;
+            chatHistoryDisplay.appendChild(messageElement);
+            chatHistoryDisplay.scrollTop = chatHistoryDisplay.scrollHeight; // Scroll to bottom
+        }
+
+        sendChatBtn.addEventListener('click', async () => {
+            const userQuery = chatInput.value.trim();
+            if (!userQuery) return;
+
+            addMessageToChat(userQuery, 'user');
+            chatInput.value = ''; // Clear input
+
+            // Add user query to chat history for LLM context
+            chatHistory.push({ role: "user", parts: [{ text: userQuery }] });
+
+            sendChatBtn.disabled = true;
+            const originalButtonText = sendChatBtn.textContent;
+            sendChatBtn.textContent = '思考中...';
 
             try {
-                let chatHistory = [];
-                const prompt = `根据家族谱系中对家族传承和贡献的强调，为名为“${name}”的家族成员提供一段简短、鼓舞人心的洞察或祝福语。例如，如果提到“杨强”在修撰家谱中贡献，可以强调他的细致和奉献。请用中文回答，保持积极向上的语气。`;
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                const payload = { contents: chatHistory };
+                // Construct the prompt with system instruction, family data, and conversation history
+                const systemInstruction = `你是一个家族谱系专家，你的任务是根据提供的家族信息，回答用户关于家族成员的提问。请只回答基于你所提供的信息，不要编造。如果信息不在你提供的内容中，请说明你无法找到相关信息。请以简洁、直接的中文回答。`;
+                
+                // For the first message, include the system instruction and family data.
+                // For subsequent messages, the chatHistory already contains this context.
+                let contentsToSend = chatHistory;
+                if (chatHistory.length === 1) { // If this is the very first user message
+                    contentsToSend = [{ role: "user", parts: [{ text: systemInstruction + "\n\n" + familyData + "\n\n" + userQuery }] }];
+                } else {
+                    // For subsequent messages, prepend the system instruction and family data to the current turn's user message
+                    // This ensures the model always has the full context for each turn, even if chatHistory grows long.
+                    // A more robust solution for very long histories would involve summarization.
+                    contentsToSend = [
+                        { role: "user", parts: [{ text: systemInstruction + "\n\n" + familyData }] },
+                        ...chatHistory
+                    ];
+                }
+
+                const payload = { contents: contentsToSend };
+                
                 // 请将 YOUR_API_KEY_HERE 替换为您的实际 Gemini API 密钥
                 const apiKey = "AIzaSyDoDWUH-TBds1CXbFqQIT5O7p9RvCWXzo0"; 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
-                console.log('Sending API request with prompt:', prompt);
+                console.log('Sending API request with payload:', payload);
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -398,7 +476,9 @@
                 if (!response.ok) {
                     const errorBody = await response.text();
                     console.error('API request failed:', response.status, response.statusText, errorBody);
-                    insightOutput.innerHTML = `<span class="text-red-500">API请求失败 (${response.status} ${response.statusText})。这可能是由于API配额或速率限制。请稍后重试。详情: ${errorBody.substring(0, Math.min(errorBody.length, 200))}...</span>`;
+                    const errorMessage = `API请求失败 (${response.status} ${response.statusText})。这可能是由于API配额或速率限制，或网络问题。请稍后重试。`;
+                    addMessageToChat(errorMessage, 'ai');
+                    chatHistory.push({ role: "model", parts: [{ text: errorMessage }] }); // Add error to history
                     return;
                 }
 
@@ -408,30 +488,31 @@
                 if (result.candidates && result.candidates.length > 0 &&
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
-                    const text = result.candidates[0].content.parts[0].text;
-                    insightOutput.innerHTML = `<span class="text-gray-900">${text}</span>`;
-                    console.log('Insight generated successfully:', text);
+                    const aiResponse = result.candidates[0].content.parts[0].text;
+                    addMessageToChat(aiResponse, 'ai');
+                    chatHistory.push({ role: "model", parts: [{ text: aiResponse }] }); // Add AI response to history
+                    console.log('AI response generated successfully:', aiResponse);
                 } else {
                     console.warn('API returned empty or malformed candidates:', result);
-                    insightOutput.innerHTML = '<span class="text-red-500">API返回结果为空或格式不正确。未能生成洞察。</span>';
+                    const errorMessage = '未能从家谱信息中找到相关内容，请尝试换个问题。';
+                    addMessageToChat(errorMessage, 'ai');
+                    chatHistory.push({ role: "model", parts: [{ text: errorMessage }] }); // Add error to history
                 }
             } catch (error) {
                 console.error('Error during API call or processing:', error);
-                insightOutput.innerHTML = '<span class="text-red-500">生成洞察时发生网络或处理错误，请检查控制台。</span>';
+                const errorMessage = '生成回答时发生网络或处理错误，请检查控制台。';
+                addMessageToChat(errorMessage, 'ai');
+                chatHistory.push({ role: "model", parts: [{ text: errorMessage }] }); // Add error to history
             } finally {
-                insightLoading.classList.add('hidden');
-                console.log('Loading spinner hidden.');
-                
-                // 恢复按钮状态，并设置一个冷却时间
-                setTimeout(() => {
-                    generateInsightBtn.disabled = false;
-                    generateInsightBtn.textContent = originalButtonText;
-                }, 5000); // 5秒后恢复按钮，您可以根据需要调整这个时间
+                sendChatBtn.disabled = false;
+                sendChatBtn.textContent = originalButtonText;
+            }
+        });
 
-                if (insightOutput.innerHTML.trim() === '' || insightOutput.innerHTML.includes('正在生成洞察...')) {
-                     insightPlaceholder.classList.remove('hidden');
-                     insightOutput.classList.add('justify-center');
-                }
+        // Allow sending message with Enter key
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !sendChatBtn.disabled) {
+                sendChatBtn.click();
             }
         });
     </script>
