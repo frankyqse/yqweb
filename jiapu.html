@@ -436,22 +436,3 @@
     </script>
 </body>
 </html>
-```
-**请务必将代码中的 `const apiKey = "YOUR_API_KEY_HERE";` 替换为您自己的 Gemini API 密钥。**
-
-### 部署到 GitHub Pages 的操作步骤 (再次确认)
-
-1.  **获取 Gemini API 密钥：** 确保您已经从 [Google AI Studio](https://aistudio.google.com/app/apikey) 获取了您的 API 密钥。
-2.  **修改 HTML 文件：** 将上面提供的代码复制并替换您本地的 `index.html` 文件内容，并**将 `YOUR_API_KEY_HERE` 替换为您的实际 API 密钥**。
-3.  **创建 GitHub 仓库：** 如果您还没有，在 GitHub 上创建一个新的公共（Public）仓库。
-4.  **上传 HTML 文件：** 将修改后的 `index.html` 文件上传到您新创建的 GitHub 仓库的根目录。
-5.  **启用 GitHub Pages：**
-    * 进入您的 GitHub 仓库页面。
-    * 点击 `Settings`（设置）选项卡。
-    * 在左侧导航栏中，点击 `Pages`（页面）。
-    * 在 `Branch`（分支）部分，将下拉菜单从 `None` 更改为 `main`（或 `master`）。
-    * 点击 `Save`（保存）按钮。
-
-部署完成后，请通过 GitHub Pages 提供的链接访问您的信息图，并打开浏览器开发者工具的控制台（按 `F12` 键，然后选择 `Console` 标签页）。仔细观察每次点击“生成洞察”按钮时控制台的输出，这将帮助您确认是否是 API 配额或速率限制导致的问题。
-
-如果问题依然存在，并且控制台显示 API 返回了 429 (Too Many Requests) 或 403 (Forbidden) 错误，那么基本可以确认是 API 限制问题。您可能需要等待一段时间让配额重置，或者考虑升级您的 Google Cloud 账户以获得更高的 API 
