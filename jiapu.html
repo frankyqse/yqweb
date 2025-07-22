@@ -1571,6 +1571,44 @@
             chatHistoryDisplay.scrollTop = chatHistoryDisplay.scrollHeight; // Scroll to bottom
         }
 
+        function getCurrentChineseDateTime() {
+            const now = new Date(); // 获取当前的日期和时间对象
+        
+            // 定义日期格式选项，使其符合中文常用格式
+            const dateOptions = {
+                year: 'numeric',   // 年份，例如：2024
+                month: 'long',     // 月份全称，例如：七月
+                day: 'numeric'     // 日，例如：23
+            };
+        
+            // 定义时间格式选项，使其符合中文常用格式
+            const timeOptions = {
+                hour: '2-digit',   // 小时，两位数，例如：08
+                minute: '2-digit', // 分钟，两位数，例如：00
+                second: '2-digit', // 秒，两位数，例如：00
+                hour12: false      // 使用24小时制
+            };
+        
+            // 将日期和时间分别格式化为中文常用字符串
+            // 'zh-CN' 表示中国大陆的语言环境
+            const formattedDate = now.toLocaleDateString('zh-CN', dateOptions);
+            const formattedTime = now.toLocaleTimeString('zh-CN', timeOptions);
+        
+            // 将日期和时间组合成最终的字符串
+            const chineseDateTimeString = `${formattedDate} ${formattedTime}`;
+        
+            return chineseDateTimeString;
+        }
+        
+        // 调用函数获取格式化后的日期时间
+        const currentDateTimeInChinese = getCurrentChineseDateTime();
+        
+        // 在控制台打印结果，您可以将这个变量用于其他地方
+        //console.log(currentDateTimeInChinese); // 例如: "2024年7月23日 02:00:00"
+        
+        // 另一个示例：直接在HTML元素中显示
+        // document.getElementById('displayArea').textContent = currentDateTimeInChinese;
+
         sendChatBtn.addEventListener('click', async () => {
             const userQuery = chatInput.value.trim();
             if (!userQuery) return;
@@ -1587,7 +1625,7 @@
 
             try {
                 // Construct the prompt with system instruction, family data, and conversation history
-                const systemInstruction = `你是一个家族谱系专家，你的任务是根据提供的家族信息，回答用户关于家族成员的提问。请只回答基于你所提供的信息，不要编造。如果信息不在你提供的内容中，请说明你无法找到相关信息。请以简洁、直接的中文回答。`;
+                const systemInstruction = `现在时间是:${currentDateTimeInChinese}. 你是一个家族谱系专家，你的任务是根据提供的家族信息，回答用户关于家族成员的提问。请只回答基于你所提供的信息，不要编造。如果信息不在你提供的内容中，请说明你无法找到相关信息。请以简洁、直接的中文回答。`;
                 
                 // For the first message, include the system instruction and family data.
                 // For subsequent messages, the chatHistory already contains this context.
